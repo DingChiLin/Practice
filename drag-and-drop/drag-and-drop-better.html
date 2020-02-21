@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>Design Pattern</title>
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+body{
+	touch-action:none;
+}
+.box{
+	width:90px;height:90px;background-color:#eecccc;
+}
+</style>
+</head>
+<body>
+	<div id="root"></div>
+	<script type="text/babel">
+		class Box extends React.Component{
+			constructor(props){
+				super(props);
+				this.state={
+						left:"auto",
+						top:"auto",
+						dragging:false
+				};
+				this.drag=this.drag.bind(this);
+			}
+			drag(e){
+				e.preventDefault(); e.stopPropagation();
+				let box=e.currentTarget;
+				let rect=box.getBoundingClientRect();
+				let offset={
+					x:e.clientX-rect.x,
+					y:e.clientY-rect.y
+				};
+				let x=e.clientX-offset.x;
+				let y=e.clientY-offset.y;
+				this.setState({
+					left:x, top:y, dragging:true
+				});
+				let move=(e)=>{
+					e.preventDefault(); e.stopPropagation();
+					let x=e.clientX-offset.x;
+					let y=e.clientY-offset.y;
+					this.setState({left:x, top:y, dragging:true});
+				};
+				let up=(e)=>{
+					e.preventDefault(); e.stopPropagation();
+					this.setState({left:"auto", top:"auto", dragging:false});
+					document.removeEventListener("pointermove", move);
+					document.removeEventListener("pointerup", up);
+					document.removeEventListener("pointercancel", up);
+				};
+				document.addEventListener("pointermove", move);
+				document.addEventListener("pointerup", up);
+				document.addEventListener("pointercancel", up);
+			}
+			render(){
+				return <div onPointerDown={this.drag} className="box" style={{left:this.state.left, top:this.state.top, position:(this.state.dragging?"absolute":"static")}}></div>
+			}
+		}
+		class App extends React.Component{
+			constructor(props){
+				super(props);
+			}
+			render(){
+				return <>
+					<Box/>
+				</>
+			}
+		}
+		ReactDOM.render(
+			<App />,
+			document.getElementById("root")
+		);
+	</script>
+</body>
+</html>

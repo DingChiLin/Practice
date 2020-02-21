@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>Design Pattern</title>
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+body{
+	touch-action:none;
+}
+.list{
+	display:flex;
+}
+.box{
+	width:90px;height:90px;background-color:#eecccc;
+	margin:5px;
+}
+.box>.head{
+	width:100%;height:30px;background-color:#880000;
+}
+.mark{
+	background-color:#cccccc;
+}
+</style>
+</head>
+<body>
+	<div id="root"></div>
+	<script type="text/babel">
+		class Box extends React.Component{
+			constructor(props){
+				super(props);
+				this.state={
+					boxes:[
+						{title:"Title 1"},
+						{title:"Title 2"},
+						{title:"Title 3"}
+					],
+					dragInfo:{
+						left:"auto",
+						top:"auto",
+						index:-1,
+						markIndex:-1
+					}
+				};
+				this.drag=this.drag.bind(this);
+			}
+			drag(e){
+				e.preventDefault(); e.stopPropagation();
+				let box=e.currentTarget.parentElement;
+				let index=parseInt(box.getAttribute("index"));
+				let rect=box.getBoundingClientRect();
+				let offset={
+					x:e.clientX-rect.x,
+					y:e.clientY-rect.y
+				};
+				let x=e.clientX-offset.x;
+				let y=e.clientY-offset.y;
+				this.setState({dragInfo:{
+					left:x, top:y, index:index, markIndex:index
+				}});
+				let move=(e)=>{
+					e.preventDefault(); e.stopPropagation();
+					let x=e.clientX-offset.x;
+					let y=e.clientY-offset.y;
+					let boxWidth=100;
+					let markIndex=Math.floor((x+rect.width/2)/boxWidth);
+					if(markIndex<0){
+						markIndex=0;
+					}else if(markIndex>this.state.boxes.length-1){
+						markIndex=this.state.boxes.length-1;
+					}
+					this.setState({dragInfo:{left:x, top:y, index:index, markIndex:markIndex}});
+				};
+				let up=(e)=>{
+					e.preventDefault(); e.stopPropagation();
+					this.setState((preState)=>{
+						let boxes=preState.boxes.slice(0);
+						let removedBox=boxes.splice(preState.dragInfo.index, 1)[0];
+						boxes.splice(preState.dragInfo.markIndex, 0, removedBox);
+						return {
+							boxes:boxes,
+							dragInfo:{left:"auto", top:"auto", index:-1, markIndex:-1}
+						};
+					});
+					document.removeEventListener("pointermove", move);
+					document.removeEventListener("pointerup", up);
+				};
+				document.addEventListener("pointermove", move);
+				document.addEventListener("pointerup", up);
+			}
+			render(){
+				let dragInfo=this.state.dragInfo;
+				let elements=[];
+				let box;
+				for(let i=0;i<this.state.boxes.length;i++){
+					box=this.state.boxes[i];
+					if(i===dragInfo.markIndex && i<=dragInfo.index){
+						elements.push(<div key="mark" className="box mark" />);
+					}
+					if(i===dragInfo.index){
+						elements.push(<div key={i} index={i} className="box" style={{left:dragInfo.left, top:dragInfo.top, position:"absolute", transform:"rotate(15deg)"}}>
+							<div onPointerDown={this.drag} className="head">{box.title}</div>
+							<div className="content"></div>
+						</div>);
+					}else{
+						elements.push(<div key={i} index={i} className="box">
+							<div onPointerDown={this.drag} className="head">{box.title}</div>
+							<div className="content"></div>
+						</div>);
+					}
+					if(i===dragInfo.markIndex && i>dragInfo.index){
+						elements.push(<div key="mark" className="box mark" />);
+					}
+				}
+
+				return <div className="list">
+					{elements}
+				</div>;
+			}
+		}
+		class App extends React.Component{
+			constructor(props){
+				super(props);
+			}
+			render(){
+				return <>
+					<Box/>
+				</>
+			}
+		}
+		ReactDOM.render(
+			<App />,
+			document.getElementById("root")
+		);
+	</script>
+</body>
+</html>

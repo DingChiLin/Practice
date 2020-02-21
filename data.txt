@@ -1,0 +1,13 @@
+id,item,price
+1,Banana,10
+2,Macbook,48000
+3,Mask,8700
+4,Pencil,5
+5,Chair,500
+6,House,8000000
+7,T-Shirt,350
+
+
+
+
+
