@@ -7,10 +7,6 @@ app.use(express.urlencoded());
 app.use(express.json())
 app.use(express.static('view'));
 
-app.get('/', (req, res) => {
-    res.send("HI");
-})
-
 app.get('/score', (req, res) => {
     res.sendFile(path.join(__dirname, 'view/score.html'));
 })
@@ -26,17 +22,10 @@ app.post('/calculate', (req, res) => {
         }
     }
 
-    let minScore = 100;
-    for (s of scores) {
-        if (s < minScore) {
-            minScore = s;
-        }
-    }
-
     let newScores = [];
+    const diff = 100 - maxScore;
     for (s of scores) {
-        const ratio = 50 / (maxScore - minScore);
-        const newScore = s * ratio + (100 - maxScore * ratio);
+        const newScore = s + diff;
         newScores.push(newScore);
     }
 

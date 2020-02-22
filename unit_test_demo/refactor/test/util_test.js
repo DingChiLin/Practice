@@ -1,25 +1,32 @@
 const assert = require('assert');
-const {adjustScore, countScoreUnderThreshold} = require('../util');
+const util = require('../util');
 
 describe("Util", () => {
-    it("adjust score with five scores", () => {
-        const scores = [90, 60, 45, 30, 15];
-        const newScores = adjustScore(scores);
-        const expect = [100, 80, 70, 60, 50];
-        assert.deepEqual(newScores, expect);
+    it("find max", () => {
+        const scores = [45, 90, 60, 30, 15];
+        const maxScore = util.findMaxScore(scores);
+        const expect = 90
+        assert.equal(maxScore, expect);
     })
 
-    it("adjust score with two scores", () => {
-        const scores = [90, 40];
-        const newScores = adjustScore(scores);
-        const expect = [100, 50];
-        assert.deepEqual(newScores, expect);
+    it("find max 2", () => {
+        const scores = [1,2,80,3,55];
+        const maxScore = util.findMaxScore(scores);
+        const expect = 80
+        assert.equal(maxScore, expect);
     })
 
-    it("count number below", () => {
-        const scores = [100, 80, 70, 59, 50];
-        const count = countScoreUnderThreshold(scores, 60);
-        const expect = 2
-        assert.equal(count, expect);
+    it("adjustScores", () => {
+        const scores = [1,2,3,4,5];
+        const diff = 10;
+        const newScores = util.adjustScores(scores, diff);
+        assert.deepEqual(newScores, [11,12,13,14,15])
     })
+
+    it("findFlunkCount", () => {
+        const scores = [100,80,70,50,30];
+        const flunkCount = util.findFlunkCount(scores);
+        assert.equal(flunkCount, 2);
+    })
+
 })
