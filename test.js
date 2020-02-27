@@ -1,8 +1,9 @@
-console.time();
-const str = "a";
-for (let i = 0; i < 2500000; i ++) {
-  if (i === str) {
-    console.log("get");
+const nums = [1,2,3,4,5,6];
+const target = 4;
+
+for (i in nums) {
+  if(nums[i] == target) {
+    console.log(i);
   }
 }
-console.timeEnd();
+
