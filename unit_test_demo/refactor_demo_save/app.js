@@ -17,7 +17,7 @@ app.post('/calculate', (req, res) => {
      */
     const data = req.body;
     // e.g.: [90, 80, 70 ,50, 40]
-    const scores = data.scores.map(x => parseInt(x));
+    const scores = data.scores.map(x => parseInt(x)); 
 
     /**
      * Adjust score

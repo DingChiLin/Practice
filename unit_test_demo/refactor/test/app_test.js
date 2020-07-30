@@ -15,7 +15,7 @@ describe('App', async () => {
         assert.equal(res.body.number, 1);
     })
 
-    it("calculate flunk count 3", async () => {
+    it("calculate flunk count 2", async () => {
         const res = await chai.request(app)
             .post('/calculate')
             .send({
@@ -24,7 +24,7 @@ describe('App', async () => {
         assert.equal(res.body.number, 2);
     })
 
-    it("calculate flunk count 3", async () => {
+    it("calculate flunk count 0", async () => {
         const res = await chai.request(app)
             .post('/calculate')
             .send({
@@ -33,7 +33,7 @@ describe('App', async () => {
         assert.equal(res.body.number, 0);
     })
 
-    it("calculate flunk count 2", async () => {
+    it("calculate flunk count 1", async () => {
         const res = await chai.request(app)
             .post('/calculate')
             .send({
