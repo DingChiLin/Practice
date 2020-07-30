@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Management for Stylish</title>
+    <style>
+        body{
+            font-size:16px;
+            font-family:"Noto Sans TC", "微軟正黑體", "新細明體", arial, sans-serif;
+            color:#3f3a3a;line-height:2.5em;
+        }
+        textarea{
+            width:400px;height:100px;padding:5px;
+        }
+        input{
+            width:300px;padding:5px;
+        }
+        #msg{
+            color: red;
+        }
+        </style>
+</head>
+<body>
+    <h1>Create a new product</h1>
+    <form name='form' id='form'>
+        <label>Category</label>
+        <select name='category' id='category'>
+            <option value='women'>Women</option>
+            <option value='men'>Men</option>
+            <option value='accessories'>Accessories</option>
+        </select>
+        <br>
+        <label>Title</label>
+        <input id='title' type='text' name='title'>
+        <br>
+        <label>Description</label>
+        <br>
+        <textarea id='description' type='text' name='description'></textarea>
+        <br>
+        <label>Price</label>
+        <input type='text' name='price' id='price'>
+        <br>
+        <label>Texture</label>
+        <input type='text' name='texture' id='texture'>
+        <br>
+        <label>Wash</label>
+        <input type='text' name='wash' id='wash' placeholder="The way we can wash">
+        <br>
+        <label>Place</label>
+        <input type='text' name='place' id='place' placeholder="Place of product">
+        <br>
+        <label>Note</label>
+        <input type='text' name='note' id='note'>
+        <br>
+        <label>Story</label>
+        <br>
+        <textarea type='text' name='story' id='story' placeholder="Product multiline story"></textarea>
+        <br>
+        <button type="button" onclick="addNewProduct()">Create</button>
+        <br>
+        <label>Main_image</label>
+        <input type='file' name='main_image' id='main_image'><br>
+        <label>Other images</label>
+        <input type='file' name='other_images' id='other_images' multiple><br>
+        <button type="button" onclick="addNewImages()">Add new images</button>
+        <br>
+        <label>Stock</label>
+        <select name='color' id='color'>
+            <option value='FFFFFF'>白色</option>
+            <option value='FFDDDD'>粉紅</option>
+            <option value='DDFFBB'>亮綠</option>
+        </select>
+        <select name='size' id='size'>
+            <option value='S'>S</option>
+            <option value='M'>M</option>
+            <option value='L'>L</option>
+        </select>
+        <input type="text" name="stock" id="stock" placeholder="stock"><br>
+        <button type="button" onclick="addNewStock()">Add new stock</button>
+        <p id='msg'></p>
+    </form>
+
+    <script> 
+        //getElementById 
+        function getValue(element) {
+            const elementValue = document.getElementById(element).value;
+            return elementValue;
+        };
+        //Get images
+        function getImages(element) {
+            console.log("File:", document.getElementById(element).files[0]);
+            const ImageValue = document.getElementById(element).files[0];
+            return ImageValue;
+        }
+        //Use Fetch to post
+            //Add new product
+        function addNewProduct() {
+            const productData = {
+                category: getValue('category'),
+                title: getValue('title'),
+                description: getValue('description'),
+                price: getValue('price'),
+                texture: getValue('texture'),
+                wash: getValue('wash'),
+                place: getValue('place'),
+                note: getValue('note'),
+                story: getValue('story'),
+            };
+            console.log(productData);
+            return fetch('/addNewProduct', {
+                method: 'POST',
+                body:JSON.stringify(productData),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }).then(res => {
+                return res.json();
+            }).then(res => {
+                console.log('success');
+            })
+        };
+            //Add new stock
+        function addNewStock() {
+            const stockData = {
+                title: getValue('title'),
+                color: getValue('color'),
+                size: getValue('size'),
+                stock: getValue('stock'),
+            };
+            return fetch('/addNewStock', {
+                method: 'POST',
+                body:JSON.stringify(stockData),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }).then(res => {
+                return res.json();
+            }).then(res => {
+                console.log('success');
+            })
+        };
+        //Add other images
+        function addNewImages() {
+            const data = new FormData();
+            data.append('main_image', getImages('main_image'))
+            return fetch('/addNewImages', {
+                method: 'POST',
+                body: data,
+            }).then(res => {
+                return res.json();
+            }).then(res => {
+                console.log('success');
+            })
+        };
+    </script>
+</body>
+
+</html>

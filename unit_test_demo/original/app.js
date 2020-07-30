@@ -12,9 +12,12 @@ app.get('/score', (req, res) => {
 })
 
 app.post('/calculate', (req, res) => {
+    // Get scores from front-end input
     const data = req.body;
-    const scores = data.scores.map(x => parseInt(x));
+    // Score format example: [90, 80, 70 ,50, 40]
+    const scores = data.scores.map(x => parseInt(x)); 
 
+    // Adjust score
     let maxScore = 0;
     for (s of scores) {
         if (s > maxScore) {
@@ -31,11 +34,12 @@ app.post('/calculate', (req, res) => {
 
     let flunkCount = 0;
     for (score of newScores) {
-        if (score < 60){
+        if (score < 60) {
             flunkCount += 1
         }
     }
 
+    // Send result back to front-end
     res.status(200).json({number: flunkCount});
 })
 
