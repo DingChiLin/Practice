@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path')
 const app = express();
 const port = 4000;
+// const util = require('./util');
 
 app.use(express.urlencoded());
 app.use(express.json())
@@ -10,6 +11,15 @@ app.use(express.static('view'));
 app.get('/score', (req, res) => {
     res.sendFile(path.join(__dirname, 'view/score.html'));
 })
+
+// function findMaxScore(scores) {
+// }
+
+// function adjustScores(scores, diff) {
+// }
+
+// function findFlunkCount(scores) {
+// }
 
 app.post('/calculate', (req, res) => {
     /**

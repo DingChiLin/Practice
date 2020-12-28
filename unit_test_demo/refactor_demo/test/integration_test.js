@@ -13,4 +13,31 @@ describe('App', async () => {
 
         assert.equal(result.body.number, 0)
     })
+
+    it("calculate flunk count 2", async () => {
+        const res = await chai.request(app)
+            .post('/calculate')
+            .send({
+                scores: [90, 80, 70, 49, 40]
+            });
+        assert.equal(res.body.number, 2);
+    })
+
+    it("calculate flunk count 0", async () => {
+        const res = await chai.request(app)
+            .post('/calculate')
+            .send({
+                scores: [80, 80, 70, 49, 40]
+            });
+        assert.equal(res.body.number, 0);
+    })
+
+    it("calculate flunk count 1", async () => {
+        const res = await chai.request(app)
+            .post('/calculate')
+            .send({
+                scores: [90, 40]
+            });
+        assert.equal(res.body.number, 1);
+    })
 })
