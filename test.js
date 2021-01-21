@@ -1,13 +1,22 @@
-N = 10 ** 9;
+var sleep = function (time) {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            resolve();
+        }, time);
+    });
+};
 
-console.time()
-let a = 0;
-for (let i = 0; i < N; i++) {
-    a += i;
+async function exec() {
+    await sleep(5000);
 }
-console.log(a)
-console.timeEnd()
 
-// a. 1 ms
-// b. 1 s
-// c. 1 min
+async function go() {
+    console.log("start");
+    c1 = exec()
+    c2 = exec()
+    await c1;
+    await c2;
+    console.log("end");
+}
+
+go();

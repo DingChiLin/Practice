@@ -12,10 +12,10 @@ console.log(productSeries1);
 /**
  * With Dependency Injection
  */
-// function getProductSeries2(productId, now) {
-//     return productId + now.toString();
-// }
+function getProductSeries2(productId, now) {
+    return productId + now.toString();
+}
 
-// let now = Date.now();
-// const productSeries2 = getProductSeries2(111, now);
-// console.log(productSeries2);
+let now = Date.now();
+const productSeries2 = getProductSeries2(111, now);
+console.log(productSeries2);

@@ -1,0 +1,22 @@
+<html>
+<body>
+    <p>Hello</p>
+</body>
+<script>
+    const array = Array.from(Array(10).keys());
+    array.forEach(arrayItem => {
+        console.log(arrayItem);
+        fetch('http://localhost:3000/api', {
+            headers: { "Content-Type": "application/json" },
+            method: 'POST',
+            // mode: 'cors',
+            body: JSON.stringify({hello: arrayItem})
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => console.log(data))
+        .catch(error => console.error(`Fetch Error: `, error));
+    });
+</script>
+</html>

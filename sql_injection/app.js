@@ -28,9 +28,11 @@ app.post('/signin', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const q = mysqlCon.query(`SELECT * FROM user WHERE Email = '${email}' AND Password = '${password}'`, (error, result) => {
+        if (error) {
+          res.send("Error");
+          return;
+        }
         if (result.length > 0) {
-            // res.send(result[0]);
-            // console.log(result[0])
             res.send(`<html><body>Welcome ${result[0].Email}</body></html>`);
         } else {
             res.send("Fail");
@@ -50,7 +52,10 @@ app.post('/signup', (req, res) => {
 
 app.get('/user_profile', (req, res) => {
     const id = req.query.id;
-    const q = mysqlCon.query('SELECT * FROM user WHERE id =' + id, (error, result) => {
+    const q = mysqlCon.query('SELECT * FROM user WHERE id =' + id, (error, result) => {    
+        if (error) {
+          return;
+        }
         if (result.length > 0) {
             res.send(result);
         } else {
