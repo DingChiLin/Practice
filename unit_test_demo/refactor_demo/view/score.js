@@ -7,7 +7,9 @@ $("#score_form").submit((e) => {
         url,
         data: {scores},
         success: function(data) {
-            document.getElementById("result").innerHTML = data.number;
+            document.getElementById("result").innerHTML = 'Flunk Count: ' + data.number;
+            document.getElementById("result").style.color = 'red';
+            document.getElementById("result").style.fontSize = '30px';
         },
         error: function(err) {
             console.log(err);

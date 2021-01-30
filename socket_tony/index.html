@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
+</head>
+<body>
+    <h1>Chat</h1>
+    <div id='msglog' style="border-width:1px; border-style:solid; height: 300px;width: 300px;">
+    </div>
+    <form>
+        <div class='f'>
+            <div class="t">username:</div>
+            <div class="v"><input type="text" id="send_username" name="username" /></div>
+        </div>
+        <div class='f'>
+            <div class="t">text:</div>
+            <div class="v"><input type="text" id="send_msg" name="msg" /></div>
+        </div>
+        <div class='f'>
+            <div class="t">receiver:</div>
+            <div class="v"><input type="text" id="send_receiver" name="receiver" /></div>
+        </div>
+        <div class='f'>
+            <div class="t">receiver_role:</div>
+            <div class="v"><select id="send_receiver_role" name="receiver_role">
+                    　<option value="consumer">消費者</option>
+                    　<option value="seller">店家</option>
+                </select>
+            </div>
+        </div>
+        <button id='sendMessage'>送出聊天訊息</button>
+        <!--在submit按鈕處添加 Onclick事件 進行表單的簡單驗證也是可以的-->
+    </form>
+    <br>
+    <br>
+    <form>
+        <br>open event:
+        <div class='f'>
+            <div class="t">username:</div>
+            <div class="v"><input type="text" id='username' name="username" /></div>
+        </div>
+        <div class='f'>
+            <div class="t">role:</div>
+            <div class="v"><select id='role' name="role">
+                    　<option value="consumer">消費者</option>
+                    　<option value="seller">店家</option>
+                </select>
+            </div>
+        </div>
+        <button id='who'>確認你的身份</button>
+        <!--在submit按鈕處添加 Onclick事件 進行表單的簡單驗證也是可以的-->
+    </form>
+    <div id="First" onclick="a()" style="display:none;background-color: rgb(232, 207, 207) ; height:100px; width: 100px;">
+    </div>
+    <div id="second" onclick="b()" style="display:none;background-color: rgb(170, 233, 21) ; height:100px; width: 100px;">
+    </div>
+    <div id="Third" onclick="c()" style="display:none;background-color: rgb(21, 92, 233) ; height:100px; width: 100px;">
+    </div>
+    <script type="text/javascript">
+        socket = io.connect();
+        socket.on('new message', function (message) {
+            console.log("From backend: ", message);
+            const msglog = document.getElementById('msglog');
+            msglog.innerHTML += message + '<br>';
+        });
+        socket.on('err', function (error) {
+            console.log("Error from backend: ", error);
+        });
+        document.getElementById('who').addEventListener('click',who);
+        function who(e) {
+            e.preventDefault();
+            var username = document.getElementById('username').value;
+            var role = document.getElementById('role').value;
+            var data = {
+                role: role,
+                username: username
+            }
+            socket.emit('open', data);
+        }
+        document.getElementById('sendMessage').addEventListener('click',sendMessage);
+        function sendMessage(e) {
+            e.preventDefault();
+            var username = document.getElementById('send_username').value;
+            var msg = document.getElementById('send_msg').value;
+            var receiver = document.getElementById('send_receiver').value;
+            var receiver_role = document.getElementById('send_receiver_role').value;
+            var msg = {
+                username: username,
+                receiver: receiver,
+                receiver_role: receiver_role,
+                msg: msg
+            }
+            socket.emit('new message', msg);
+        }
+        function a() {
+            var r = window.confirm("customer?");
+            console.log('window.confirm ==', r);
+            var data = {
+                role: '',
+                username: ''
+            }
+            if (r == true) {
+                data.role = 'consumer';
+                data.username = 'elvin';
+                socket.emit('open', data);
+            }
+            else if (r == false) {
+                data.role = 'seller';
+                data.username = 'tony';
+                socket.emit('open', data);
+            }
+        }
+        function b() {
+            console.log('b clicked');
+            var msg = {
+                username: 'elvin',
+                receiver: 'tony',
+                receiver_role: 'seller',
+                msg: 'consumer to seller'
+            }
+            socket.emit('message', msg);
+        }
+        function c() {
+            console.log('c clicked');
+            var msg = {
+                username: 'tony',
+                receiver: 'elvin',
+                receiver_role: 'consumer',
+                msg: 'seller to consumer'
+            }
+            socket.emit('message', msg);
+        }
+    </script>
+    <style>
+        #msglog {
+            overflow: auto;
+        }
+        .f {
+            width: 300px;
+        }
+        .t {
+            display: inline-block;
+            width: 150px;
+        }
+        .v {
+            display: inline-block;
+            width: 100px;
+        }
+    </style>
+</body>
+</html>
