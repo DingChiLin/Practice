@@ -54,10 +54,9 @@ def main():
         # if (event == 'view' and view_detail == 'NULL'):
         #     print(value)
 
-        cursor.execute(
-            f"INSERT INTO tracking (client_id, time, event_type, view_detail, item_id) \
-              VALUES('{key[0]}', '{key[1]}', '{event}', '{view_detail}', {item_id})"
-        )
+        sql = "INSERT INTO tracking_realtime (client_id, time, event_type, view_detail, item_id) \
+              VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(sql, (key[0], key[1], event, view_detail, item_id)
 
         counter += len(values)
     print(counter)
