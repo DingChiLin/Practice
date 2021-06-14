@@ -12,13 +12,13 @@ app.get('/score', (req, res) => {
     res.sendFile(path.join(__dirname, 'view/score.html'));
 })
 
-// function findMaxScore(scores) {
+// function findMaxScore() {
 // }
 
-// function adjustScores(scores, diff) {
+// function adjustScores() {
 // }
 
-// function findFlunkCount(scores) {
+// function findFlunkCount() {
 // }
 
 app.post('/calculate', (req, res) => {
