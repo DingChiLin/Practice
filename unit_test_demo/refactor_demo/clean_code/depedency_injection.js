@@ -1,6 +1,4 @@
-/**
- * No Dependency Injection
- */
+// No Dependency Injection
 function getProductSeries1(productId) {
     let now = Date.now();
     return productId + now.toString();
@@ -9,9 +7,7 @@ function getProductSeries1(productId) {
 const productSeries1 = getProductSeries1(111);
 console.log(productSeries1);
 
-/**
- * With Dependency Injection
- */
+// With Dependency Injection
 function getProductSeries2(productId, now) {
     return productId + now.toString();
 }

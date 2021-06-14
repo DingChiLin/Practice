@@ -11,7 +11,7 @@ describe('App', async () => {
             .post('/calculate')
             .send({scores: [90, 80, 70, 60, 50]});
 
-        assert.equal(result.body.number, 0)
+        assert.strictEqual(result.body.number, 0)
     })
 
     it("calculate flunk count 2", async () => {
@@ -20,7 +20,7 @@ describe('App', async () => {
             .send({
                 scores: [90, 80, 70, 49, 40]
             });
-        assert.equal(res.body.number, 2);
+        assert.strictEqual(res.body.number, 2);
     })
 
     it("calculate flunk count 0", async () => {
@@ -29,7 +29,7 @@ describe('App', async () => {
             .send({
                 scores: [80, 80, 70, 49, 40]
             });
-        assert.equal(res.body.number, 0);
+        assert.strictEqual(res.body.number, 0);
     })
 
     it("calculate flunk count 1", async () => {
@@ -38,6 +38,6 @@ describe('App', async () => {
             .send({
                 scores: [90, 40]
             });
-        assert.equal(res.body.number, 1);
+        assert.strictEqual(res.body.number, 1);
     })
 })

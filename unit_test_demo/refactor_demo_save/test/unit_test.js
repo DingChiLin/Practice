@@ -6,14 +6,14 @@ describe("Util", () => {
     //     const scores = [45, 90, 60, 30, 15];
     //     const maxScore = util.findMaxScore(scores);
     //     const expect = 90
-    //     assert.equal(maxScore, expect);
+    //     assert.strictEqual(maxScore, expect);
     // })
 
     // it("find max 2", () => {
     //     const scores = [1,2,80,3,55];
     //     const maxScore = util.findMaxScore(scores);
     //     const expect = 80
-    //     assert.equal(maxScore, expect);
+    //     assert.strictEqual(maxScore, expect);
     // })
 
     // it("adjustScores", () => {
@@ -26,7 +26,7 @@ describe("Util", () => {
     // it("findFlunkCount", () => {
     //     const scores = [100,80,70,50,30];
     //     const flunkCount = util.findFlunkCount(scores);
-    //     assert.equal(flunkCount, 2);
+    //     assert.strictEqual(flunkCount, 2);
     // })
 
 })
