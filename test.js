@@ -1,8 +1,7 @@
-const PriorityQueue = require('js-priority-queue');
+let a = 1
 
-var queue = new PriorityQueue({ comparator: function(a, b) { return b - a; }});
-queue.queue(5);
-queue.queue(3);
-queue.queue(2);
-var lowest = queue.dequeue(); // returns 5
-console.log(lowest)
+function foo() {
+	a += 1
+  console.log(a);
+}
+foo()
