@@ -5,7 +5,7 @@ const mysql = require('mysql');
 const validator = require('validator');
 
 const {HOST, USERNAME, PASSWORD, DATABASE} = process.env;
-
+console.log(HOST, USERNAME, PASSWORD)
 const app = express();
 
 const mysqlCon = mysql.createConnection({
@@ -17,8 +17,8 @@ const mysqlCon = mysql.createConnection({
 })
 
 app.use(express.static('public'));
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended:true}));
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 
 app.get('/', (req, res) => {
     res.send("Welcome");
@@ -27,13 +27,13 @@ app.get('/', (req, res) => {
 app.post('/signin', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    const q = mysqlCon.query(`SELECT * FROM user WHERE Email = '${email}' AND Password = '${password}'`, (error, result) => {
+    const q = mysqlCon.query(`SELECT * FROM user WHERE email = '${email}' AND password = '${password}'`, (error, result) => {
         if (error) {
-          res.send("Error");
-          return;
+            res.send("Error");
+            return;
         }
         if (result.length > 0) {
-            res.send(`<html><body>Welcome ${result[0].Email}</body></html>`);
+            res.send(`<html><body>Welcome ${result[0].email}</body></html>`);
         } else {
             res.send("Fail");
         }
@@ -75,7 +75,7 @@ app.post('/signin_safe', (req, res) => {
     const password = req.body.password;
     const q = mysqlCon.query('SELECT * FROM user WHERE Email = ? AND Password = ?', [email, password], (error, result) => {
         if (result.length > 0) {
-            res.send(result[0]);
+            res.send(`<html><body>Welcome ${result[0].email}</body></html>`);
         } else {
             res.send("Fail");
         }
@@ -90,7 +90,6 @@ app.post('/signup_safe', (req, res) => {
     // }
 
     console.log(validator.escape(req.body.email))
-
     const email = encodeURIComponent(req.body.email);
     const password = encodeURIComponent(req.body.password);
     const q = mysqlCon.query(`INSERT INTO user (email, password) VALUES (?, ?)`, [email, password], (error, result) => {
