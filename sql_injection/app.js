@@ -5,7 +5,6 @@ const mysql = require('mysql');
 const validator = require('validator');
 
 const {HOST, USERNAME, PASSWORD, DATABASE} = process.env;
-console.log(HOST, USERNAME, PASSWORD)
 const app = express();
 
 const mysqlCon = mysql.createConnection({
