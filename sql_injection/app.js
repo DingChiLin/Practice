@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const bodyparser = require('body-parser');
 const mysql = require('mysql');
 const validator = require('validator');
 
