@@ -32,6 +32,24 @@ def in_colunm(n, col, matrix):
 def in_column_after_row(n, row, col, matrix):
     return n in [row[col] for row in matrix[row:]]
 
+def max_time_gen(x, n):
+    result = []
+    if(x < n):
+        return []
+
+    elif (x % n == 0):
+        for i in range(n):
+            result.append(x//n)
+    else:
+        zp = n - (x % n)
+        pp = x//n
+        for i in range(n):
+            if(i>= zp):
+                result.append(pp + 1)
+            else:
+                result.append(pp)
+    return result
+
 def strong_constrain():
     return
 
@@ -52,7 +70,7 @@ def pprint(matched_interview, matched_observe, students):
              ) for j in orders]
         )
 
-def match(student_count, interviewer_count, skip_time, interview_time, observe_time, interview_max_time, total_max_time, observer_queue, visited_pairs):
+def match(student_count, interviewer_count, skip_time, interview_time, observe_time, interview_max_time, total_max_time, observer_queue, visited_pairs, negative_score_limit):
     negative_score = 0
     matched_interview = [[None for j in range(interviewer_count)] for i in range(4)]
     matched_observe = [[None for j in range(interviewer_count)] for i in range(4)]
@@ -61,25 +79,22 @@ def match(student_count, interviewer_count, skip_time, interview_time, observe_t
     for i in range(4):
         for j in range(interviewer_count):
             # print(s_id, matched_interview, interview_max_time)
-            ccc = 0
+            loop_count = 0
             while in_row(s_id, i, matched_interview) or \
              in_colunm(s_id, j, matched_interview) or \
-             interview_time[s_id] == interview_max_time:
+             interview_time[s_id] == interview_max_time[s_id]:
                 s_id += 1
                 s_id %= student_count
-                ccc += 1
-                if ccc > student_count:
-                    return 0, 0, inf
+                loop_count += 1
+                if loop_count > student_count:
+                    return None, None, inf
 
             matched_interview[i][j] = s_id
             interview_time[s_id] += 1
             s_id += random.randint(0, 2)
             s_id %= student_count
 
-                
-
     tmp_stk = []
-
     offset = list(range(4))
     random.shuffle(offset)
     # print("OFFSET:", offset)
@@ -103,7 +118,7 @@ def match(student_count, interviewer_count, skip_time, interview_time, observe_t
                  in_colunm(observer_queue[0], j, matched_observe) or \
                  in_row(observer_queue[0], i, matched_observe) or \
                  in_row(observer_queue[0], i, matched_interview) or \
-                 interview_time[observer_queue[0]] + observe_time[observer_queue[0]] == total_max_time):
+                 interview_time[observer_queue[0]] + observe_time[observer_queue[0]] == total_max_time[observer_queue[0]]):
                 tmp_stk.append(observer_queue.popleft())
             
             # print("OBQ:", observer_queue)
@@ -112,25 +127,28 @@ def match(student_count, interviewer_count, skip_time, interview_time, observe_t
             # print(i, j, len(tmp_stk))
             if len(tmp_stk) == student_count:
                 negative_score += 1
+                if negative_score > negative_score_limit:
+                    return None, None, inf
                 while tmp_stk:
                     observer_queue.appendleft(tmp_stk.pop())
 
                 while observer_queue and \
                     ( \
-                        # ((matched_interview[i][j], observer_queue[0]) in visited_pairs) or \
-                        in_colunm(observer_queue[0], j, matched_interview) or \
+                        ((matched_interview[i][j], observer_queue[0]) in visited_pairs) or \
+                        # in_colunm(observer_queue[0], j, matched_interview) or \
+                        in_column_after_row(observer_queue[0], i, j, matched_interview) or \
                         in_colunm(observer_queue[0], j, matched_observe) or \
                         in_row(observer_queue[0], i, matched_observe) or \
                         in_row(observer_queue[0], i, matched_interview) or \
-                        interview_time[observer_queue[0]] + observe_time[observer_queue[0]] == total_max_time):
+                        interview_time[observer_queue[0]] + observe_time[observer_queue[0]] == total_max_time[observer_queue[0]]):
                     tmp_stk.append(observer_queue.popleft())
 
             # 仍然找不到，輪空
             if len(tmp_stk) == student_count:
-                negative_score += 5
-                matched_observe[i][j] = None
-                while tmp_stk:
-                    observer_queue.appendleft(tmp_stk.pop())
+                return None, None, inf
+                # matched_observe[i][j] = None
+                # while tmp_stk:
+                #     observer_queue.appendleft(tmp_stk.pop())
             else:
                 n = observer_queue.popleft()
                 matched_observe[i][j] = n
@@ -146,12 +164,8 @@ def match(student_count, interviewer_count, skip_time, interview_time, observe_t
     # print(interview_time, observe_time)
     return matched_interview, matched_observe, negative_score
 
-def solve(N1, N2, M, interviewer1, interviewer2, students):
+def solve(N1, N2, M, interviewer1, interviewer2, students, negative_score_limit):
 
-    
-    # print(interviewer1)
-    # print(interviewer2)
-    # print(students)
 
     student_ids = list(range(M))
     random.shuffle(student_ids)
@@ -164,20 +178,28 @@ def solve(N1, N2, M, interviewer1, interviewer2, students):
     total_negative_score = 0
 
     skip_time = (2 * N1 - M) 
-    interview_max_time = ceil(4 * N1 / M)
-    total_max_time = ceil(8 * N1 - skip_time * 4 / M)
+    interview_max_time = max_time_gen(4*N1, M) #ceil(4 * N1 / M)
+    total_max_time = max_time_gen(8 * N1 - skip_time * 4, M) #ceil(8 * N1 - skip_time * 4 / M)
+    # print("MAXX:", interview_max_time, total_max_time)
     matched_interview1, matched_observe1, negative_score = \
-        match(M, N1, skip_time, interview_time, observe_time, interview_max_time, total_max_time, observer_queue, visited_pairs)
+        match(M, N1, skip_time, interview_time, observe_time, interview_max_time, total_max_time, observer_queue, visited_pairs, negative_score_limit)
     
+    if negative_score == inf:
+        return inf, None, None, None, None, None, None
+
     # print("--- match day 1 ---")
     total_negative_score += negative_score
     # pprint(matched_interview1, matched_observe1, students)
 
     skip_time = (2 * N2 - M) 
-    interview_max_time = ceil(4 * (N1 + N2) / M)
-    total_max_time = ceil(8 * (N1 + N2) - skip_time * 8 / M)
+    interview_max_time = max_time_gen(4 * (N1 + N2), M)
+    total_max_time = max_time_gen(8 * (N1 + N2) - skip_time * 8, M)
+    # print("MAXX:", interview_max_time, total_max_time)
     matched_interview2, matched_observe2, negative_score = \
-        match(M, N2, skip_time, interview_time, observe_time, interview_max_time, total_max_time, observer_queue, visited_pairs)
+        match(M, N2, skip_time, interview_time, observe_time, interview_max_time, total_max_time, observer_queue, visited_pairs, negative_score_limit)
+
+    if negative_score == inf:
+        return inf, None, None, None, None, None, None
 
     # print("--- match day 2 ---")
     total_negative_score += negative_score
@@ -194,7 +216,6 @@ def main():
     for i in range(N1):
         interviewer1.append(get_word())
 
-
     N2 = get_number()
     interviewer2 = []
     for i in range(N2):
@@ -206,15 +227,16 @@ def main():
         students.append(get_word())
 
 
-    cur = inf
-    for i in range(100000):
-        total_negative_score, interview_time, observe_time, matched_interview1, matched_observe1, matched_interview2, matched_observe2 = solve(N1, N2, M, interviewer1, interviewer2, students)
-        if total_negative_score < cur:
+    best_negative_score = inf
+    for i in range(1000000):
+        total_negative_score, interview_time, observe_time, matched_interview1, matched_observe1, matched_interview2, matched_observe2 = solve(N1, N2, M, interviewer1, interviewer2, students, best_negative_score)
+        if total_negative_score < best_negative_score:
+            best_negative_score = total_negative_score
+
             print("=== test: ", i, "===")
             for i in range(M):
                 print(students[i], interview_time[i], observe_time[i])
 
-            cur = total_negative_score
             print("--- match day 1 ---")
             pprint(matched_interview1, matched_observe1, students)
 
@@ -236,8 +258,8 @@ def main():
                         print(pair)
                     repeated.add(pair)
 
-            print("score:", total_negative_score)
-            if total_negative_score == 0:
+            print("score:", best_negative_score)
+            if best_negative_score == 0:
                 break
 
 main()

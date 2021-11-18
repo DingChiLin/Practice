@@ -3,11 +3,13 @@ using namespace std;
 #include <stdio.h>
 #include <time.h>
 #include <iostream>
+#include <ofstream>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 int main () {
-	int nums[3] = {1,3,5};
-	for (int i = 0; i < 3; i++) {
-		cout << nums[i] << endl;
-	}
-  return 0;
+	int buf;
+	int fd = open("test.txt", O_RDWR);
+	close(fd);
 } 
