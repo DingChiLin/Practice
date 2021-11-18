@@ -1,18 +1,14 @@
-import threading
-from time import sleep
+# 基本想法
+def count_zero(nums):
+    if len(nums) == 0:
+        return 0
+    return (nums[0] == 0) + count_zero(nums[1:])
 
-def do_job(number):
-    sleep(3)
-    print(f"Job {number} finished")
+# 優化效能
+def count_zero(index, nums):
+    if index == len(nums):
+        return 0
+    return (nums[index] == 0) + count_zero(index+1, nums)
 
-def main():
-    threads = []
-    for i in range(5):
-        t = threading.Thread(target = do_job, args = (i,))
-        threads.append(t)
-        t.start()
-    for t in threads:
-        t.join()
-    print("finish all jobs")
-main()
-
+nums = [0,1,0,1,0,1,0]
+print(count_zero(0, nums))
