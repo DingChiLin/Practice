@@ -1,2 +1,4 @@
-for i in range(100000):
-	print(i)
+def test(a: int):
+	a = a**10
+	return a
+print(test(100))
