@@ -1,14 +1,14 @@
-# 基本想法
-def count_zero(nums):
-    if len(nums) == 0:
-        return 0
-    return (nums[0] == 0) + count_zero(nums[1:])
+ans = []
 
-# 優化效能
-def count_zero(index, nums):
-    if index == len(nums):
-        return 0
-    return (nums[index] == 0) + count_zero(index+1, nums)
+def backtracking(n, start, nums): 
+    if (n >= 2): # 終止條件觸發，代表走到最底層 #3
+        ans.append(nums[:])
+        return
 
-nums = [0,1,0,1,0,1,0]
-print(count_zero(0, nums))
+    for i in range(start + 1, 4):  #5
+        nums.append(i)
+        backtracking(n+1, i, nums)
+        nums.pop()
+
+backtracking(0, 0, [])
+print(ans)
