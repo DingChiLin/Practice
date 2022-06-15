@@ -22,6 +22,11 @@ class Dog(Animal):
     def dead(self):
         self.group = 'Corpse'
 
+class Cat(Animal):
+	def Walk(self):
+		print("Cat Walk")
+
+
 print('The method Walk here is overridden in the code')
 
 #Invoking Child class through object r
@@ -42,8 +47,13 @@ d.Walk()
 d.Talk()
 print(d.type)
 print(d.group)
-
 print()
+
+print("----- Cat -----")
+c = Cat()
+print(c.group)
+print()
+
 print("----- Class -----")
 print(a.alive)
 print(d.alive)
@@ -52,6 +62,5 @@ Animal.alive = False
 print(a.alive)
 print(d.alive)
 print(d2.alive)
-
 
 
