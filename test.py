@@ -1,65 +1,8 @@
-if data == None:
-	pass
-else:
-	...
-
-
-if data != None:
-	...
-
-
-
-if status == True:
-
-
-if status == True:
-	...
-
-
-
-if filenames == False:
-
-else:
-
-	...
-	...
-	...
-
-
-if not filenames:
-	print("Precipitation -... ")
-	return
-
-...
-...
-...
-
-import datetime, a, b # module
-
-datetime.a
-datetime.b
-datetime.datetime
-
-
-from datetime import datetime
-
-
-
-working_list = [(taipei_extract_and_load, TAPIEP_TEMP), (..), (..), (..)]
-
-threads = []
-for load, argv in working_list:
-	t = theading.Thread(load, arg=argv)
-	threads.append(t)
-
-for t in threads:
-	t.start()
-
-for t in threads:
-	t.join()
-
-
-
-
-
-
+A0 = dict(zip(('a','b','c','d','e'), (1,2,3,4,5)))
+A1 = range(10)
+A2 = sorted([i for i in A1 if i in A0])
+A3 = sorted([A0[s] for s in A0])
+A4 = [i for i in A1 if i in A3]
+A5 = {i:i*i for i in A1}
+A6 = [[i,i*i] for i in A1]
+print(A0,A1,A2,A3,A4,A5,A6)

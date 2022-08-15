@@ -20,6 +20,15 @@ for (let i = 0; i < arr.length; i++) {
 }
 
 
+console.log("example4:")
+let cnt = 0
+for (let i = 0; i < arr.length; i++) {
+	if (arr[i] > 4) {
+		cnt += 1
+	}
+}
+console.log(cnt)
+
 // print score
 let names = ['alice', 'bob', 'cathy']
 let scores = [100, 60, 74]
