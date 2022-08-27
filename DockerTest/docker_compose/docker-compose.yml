@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+  myweb1:
+    build: 
+      context: .
+      args:
+        whoami: "Ding Chi"
+    image: arthur/myweb1:latest
+    ports: 
+      - "8080:80"
+    networks:
+      - my-bridge-001
+  myweb2:
+    build: 
+      context: .
+      args:
+        whoami: "arthur lin"
+    image: arthur/myweb2:latest
+    ports: 
+      - "8081:80"
+    networks:
+      - my-bridge-001
+  myweb3:
+    build: 
+      context: .
+      args:
+        whoami: "gn01168178"
+    image: arthur/myweb3:latest
+    ports: 
+      - "8082:80"
+    networks:
+      - my-bridge-001
+  myweb4:
+    image: arthur/myweb1:latest
+    ports: 
+      - "8083:80"
+    networks:
+      - my-bridge-002
+  myweb5:
+    image: arthur/myweb1:latest
+    ports: 
+      - "8084:80"
+    networks:
+      - my-bridge-002
+    volumes:
+      - mainpage-vol001:/var/www/localhost/htdocs/
+networks:
+  my-bridge-001:
+  my-bridge-002:
+
+volumes:
+  mainpage-vol001:
