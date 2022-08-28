@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+  node-mysql-db:
+    container_name: mysql-db
+    build:
+      context: ./db
+    image: arthurlin/mysql-db-001
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    networks:
+      node-bridge-001:
+    volumes:
+      - node-db-data:/var/lib/mysql
+  node-app:
+    container_name: node-server
+    build:
+      context: ./server
+    image: arthurlin/node-001
+    ports:
+      - "3001:3000"
+    command: ./wait-for-it.sh mysql-db:3306 -- npm run dev
+    environment:
+      - DB_HOST=mysql-db
+      - DB_USERNAME=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
+      - DB_DATABASE=${MYSQL_DATABASE}
+    networks:
+      node-bridge-001:
+
+networks:
+  node-bridge-001:
+
+volumes:
+  node-db-data:

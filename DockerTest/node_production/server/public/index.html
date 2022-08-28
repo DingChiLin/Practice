@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Docker Example</title>
+    </head>
+    <body>
+        <h3> Hello! Ya <h3>
+        <div id = "user"></div>
+        </br>
+        </br>
+        <form method="post" action="users">
+            Name <input type="text" name="name" /><br/>
+            Email <input type="text" name="email" /><br/>
+            Password <input type="text" name="password" /></br>
+            <input type="submit" value="Create" />
+        </form>
+
+        <script>
+            fetch(`users`)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(users) {
+                console.log(users);
+                for (user of users) {
+                    let element = document.createElement("div");
+                    element.innerHTML = user.name;
+                    document.getElementById('user').appendChild(element);
+                }
+            });
+        </script>
+    </body>
+</html>
