@@ -1,8 +1,20 @@
-x := dude
+hey: one two
+	# Outputs "hey", since this is the first target
+	echo $@
 
-all:
-	echo $(x)
-	echo ${x}
+	# Outputs all prerequisites newer than the target
+	echo $?
 
-	# Bad practice, but works
-	echo $x 
+	# Outputs all prerequisites
+	echo $^
+
+	touch hey
+
+one:
+	touch one
+
+two:
+	touch two
+
+clean:
+	rm -f hey one two
