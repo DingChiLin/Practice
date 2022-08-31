@@ -4,6 +4,8 @@
 #include <iostream>
 #include "rational.h"
 
+Rational::Rational(const int num, const int den): numerator(num), denominator(den) {}
+
 int Rational::get_num() {
     return numerator;
 }
