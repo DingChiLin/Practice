@@ -1,12 +1,13 @@
 class Rational {
 private:
-    int numerator;
-    int denominator;
+    int n;
+    int d;
+    int gcd(int x, int y);
 public:
-    Rational(const int num, const int den);
-    int get_num();
-    void set_num(int num);
-    int get_den();
-    void set_den(int den);
-    void print() const;
+    Rational(int num = 0, int den = 1);
+    std::string raw_string() const;
+    Rational operator + (const Rational &) const;
+    Rational operator - (const Rational &) const;
+    Rational operator * (const Rational &) const;
+    Rational operator / (const Rational &) const;
 };
